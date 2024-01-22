@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- jquery -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-wEmeIV1mKuiNpC+IOBjI7aAzPcEZeedi5yW5f2yOq55WWLwNGmvvx4Um1vskeMj0" crossorigin="anonymous">
+    <title>EXPIRED FOOD</title>
+</head>
+
+<body>
+    <h2>EXPIRED FOOD</h2>
+    <div class="container" style="width: 900px; height: 700px;">
+        <br>
+
+        <form class="row g-3" onsubmit="return false;">
+            <h3 class="text-left">註冊</h3>
+            <div class="col-md-12">
+                <label class="form-label">姓名</label>
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="inputLastName" placeholder="姓" aria-label="" required>
+            </div>
+            <div class="col-md-6">
+                <input type="text" class="form-control" id="inputFirstName" placeholder="名" aria-label="" required>
+            </div>
+            <div class="col-md-8">
+                <label for="inputEmail4" class="form-label">Email</label>
+            </div>
+            <div class="input-group">
+                <input type="email" class="form-control" id="inputEmail" placeholder="food@gmail.com" required>
+                <button type="button" class="btn btn-warning" onclick="validateEmail();">驗證</button>
+            </div>
+            <div class="col-md-12">
+                <label for="inputCity" class="form-label">手機</label>
+                <input type="text" class="form-control" id="inputPhone" required>
+            </div>
+            <div class="col-12">
+                <label for="inputAddress" class="form-label">帳號</label>
+                <input type="text" class="form-control" id="inputAccount" required>
+            </div>
+            <div class="col-md-12">
+                <label for="inputPassword4" class="form-label">密碼</label>
+                <input type="password" class="form-control" id="inputPassword" required>
+            </div>
+            <div class="col-md-12">
+                <label for="inputPassword4" class="form-label">確認密碼</label>
+                <input type="password" class="form-control" id="inputConfirmPassword" required>
+            </div>
+            <div class="col-12">
+                <button type="submit" class="btn btn-primary" onclick="register();">註冊</button>
+            </div>
+        </form>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        // init function
+    });
+
+    // 註冊
+    function register() {
+        const user = {
+                account:$('#inputAccount').val(), 
+                password:$('#inputPassword').val(), 
+                email:$('#inputEmail').val(), 
+                last_name:$('#inputLastName').val(),
+                first_name:$('#inputFirstName').val(),
+                mobile_phone:$('#inputPhone').val()
+            };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/signin",
+            contentType: 'application/json',
+            data: JSON.stringify(user),
+            success: function(res){
+                $('#inputAccount').val(''), 
+                $('#inputPassword').val(''), 
+                $('#inputEmail').val(''), 
+                $('#inputLastName').val(''),
+                $('#inputFirstName').val(''),
+                $('#inputPhone').val('')
+                alert(res);
+            },
+            error: function (err) { console.log(err) },
+        });
+    }
+
+</script>
+
+</html>
