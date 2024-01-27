@@ -19,9 +19,9 @@ public class UsersDAO {
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
 	
-	public Users checkAccount(String account){
+	public Users qryUser(String account){
 		String sql = ""; 
-		sql += " SELECT account, password, email, mobile_phone, last_name, first_name ";
+		sql += " SELECT user_id, account, password, email, mobile_phone, last_name, first_name ";
 		sql += "      ,last_login_time, failed_login, created_time, updated_time ";
 		sql += " FROM users WHERE 1=1 ";
 		sql += "     AND account = :account ";
@@ -40,9 +40,9 @@ public class UsersDAO {
 		String sql = "";
 		sql += " INSERT INTO users( ";
 		sql += "    account, password, email, mobile_phone, last_name, first_name ";
-		sql += "    ,last_login_time, failed_login, created_time, updated_time) ";
+		sql += "    , verified, created_time, updated_time) ";
 		sql += " VALUE(:account, :password, :email, :mobile_phone, :last_name, :first_name ";
-		sql += "    ,:last_login_time, :failed_login, :created_time, :updated_time) ";
+		sql += "    , :verified, :created_time, :updated_time) ";
 		
 		Map<String, Object> map = new HashMap<>();
 		Date now = new Date();
@@ -53,8 +53,7 @@ public class UsersDAO {
         map.put("mobile_phone", user.getMobile_phone());
         map.put("last_name", user.getLast_name());
         map.put("first_name", user.getFirst_name());
-        map.put("last_login_time", sdFormat.format(now));
-        map.put("failed_login", 0);
+        map.put("verified", "N");
         map.put("created_time", sdFormat.format(now));
         map.put("updated_time", sdFormat.format(now));
 		
@@ -62,5 +61,33 @@ public class UsersDAO {
 		count = namedParameterJdbcTemplate.update(sql, map);
 		return count;
 	}
-
+	
+	public int updateUser(Users user) {
+		String sql = "";
+		sql += " UPDATE users SET ";
+		sql += "    password, mobile_phone, last_name, first_name ";
+		sql += "    , updated_time) ";
+		sql += " VALUE(:password, :mobile_phone, :last_name, :first_name ";
+		sql += "    , :updated_time) ";
+		sql += " WHERE 1=1 ";
+		sql += "   AND user_id = :user_id ";
+		sql += "   AND email = :email ";
+		
+		Map<String, Object> map = new HashMap<>();
+		Date now = new Date();
+		SimpleDateFormat sdFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        map.put("account", user.getAccount());
+        map.put("password", user.getPassword());
+        map.put("mobile_phone", user.getMobile_phone());
+        map.put("last_name", user.getLast_name());
+        map.put("first_name", user.getFirst_name());
+        map.put("updated_time", sdFormat.format(now));
+        map.put("user_id", user.getUser_id());
+        map.put("email", user.getEmail());
+		
+        int count = 0;
+		count = namedParameterJdbcTemplate.update(sql, map);
+		return count;
+	}
+	
 }

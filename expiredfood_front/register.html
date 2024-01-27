@@ -29,8 +29,24 @@
             <div class="col-md-6">
                 <input type="text" class="form-control valid" id="inputFirstName" placeholder="名" aria-label="" required>
             </div>
+            <div class="col-12">
+                <label for="inputAccount" class="form-label">帳號</label>
+                <input type="text" class="form-control" id="inputAccount" required onblur="checkAccountDuplicate();">
+                <label class="form-label duplicate" style="color:red; font-size: smaller;display:none">該帳號已被註冊</label>
+                <label class="form-label account_not_null" style="color:red; font-size: smaller;display:none">請輸入帳號</label>
+            </div>
+            <div class="col-md-12">
+                <label for="inputPassword" class="form-label">密碼</label>
+                <input type="password" class="form-control" id="inputPassword" required>
+                <label class="form-label pd_not_null" style="color:red; font-size: smaller;display:none">請輸入密碼</label>
+            </div>
+            <div class="col-md-12">
+                <label for="inputConfirmPassword" class="form-label">確認密碼</label>
+                <input type="password" class="form-control" id="inputConfirmPassword" required>
+            </div>
             <div class="col-md-8">
                 <label for="inputEmail" class="form-label">Email</label>
+                <label class="form-label email_not_null" style="color:red; font-size: smaller;display:none">請輸入Email</label>
             </div>
             <div class="input-group">
                 <input type="email" class="form-control" id="inputEmail" placeholder="food@gmail.com" required>
@@ -38,20 +54,9 @@
             </div>
             <div class="col-md-12">
                 <label for="inputPhone" class="form-label">手機</label>
-                <input type="text" class="form-control" id="inputPhone" required>
+                <input type="text" class="form-control" id="inputPhone">
             </div>
-            <div class="col-12">
-                <label for="inputAccount" class="form-label">帳號</label>
-                <input type="text" class="form-control" id="inputAccount" required>
-            </div>
-            <div class="col-md-12">
-                <label for="inputPassword" class="form-label">密碼</label>
-                <input type="password" class="form-control" id="inputPassword" required>
-            </div>
-            <div class="col-md-12">
-                <label for="inputConfirmPassword" class="form-label">確認密碼</label>
-                <input type="password" class="form-control" id="inputConfirmPassword" required>
-            </div>
+            
             <div class="col-12">
                 <button type="button" class="btn btn-primary" onclick="register();">註冊</button>
             </div>
@@ -60,7 +65,7 @@
 </body>
 <script>
     $(function () {
-        alert("Welcome To Expired Food!")
+        // alert("Welcome To Expired Food!")
     });
 
     // 註冊
@@ -79,26 +84,99 @@
 
             $.ajax({
                 type: "POST",
-                url: "http://localhost:8080/signin",
+                url: "http://localhost:8080/register",
                 contentType: 'application/json',
                 data: JSON.stringify(user),
                 success: function(res){
-                    $('#inputAccount').val(''), 
-                    $('#inputPassword').val(''), 
-                    $('#inputConfirmPassword').val(''), 
-                    $('#inputEmail').val(''), 
-                    $('#inputLastName').val(''),
-                    $('#inputFirstName').val(''),
-                    $('#inputPhone').val('')
-                    alert(res);
+                    if ("0" === res) {
+                        $('#inputAccount').val(''), 
+                        $('#inputPassword').val(''), 
+                        $('#inputConfirmPassword').val(''), 
+                        $('#inputEmail').val(''), 
+                        $('#inputLastName').val(''),
+                        $('#inputFirstName').val(''),
+                        $('#inputPhone').val('')
+                        alert('恭喜你註冊成功!');
+                    } else if ("1" === res) {
+                        alert('註冊失敗!');
+                    } else if ("2" === res) {
+                        alert('該帳號已被註冊!');
+                    } else if ("3" === res) {
+                        alert('請確認密碼!');
+                    }
                 },
-                error: function (err) { console.log(err) },
+                error: function (err) {
+                    alert('註冊失敗!'); 
+                },
             });
             $('#myForm').removeClass('was-validated');
         } else {
             $('#myForm').addClass('was-validated');
             
         }
+    }
+
+    // 帳號是否重覆
+    function checkAccountDuplicate() {
+        console.log("hii");
+        var account = $('#inputAccount').val();
+        $.ajax({
+                type: "GET",
+                url: "http://localhost:8080/checkDuplicate?account="+account,
+                contentType: 'application/json',
+                success: function(res){
+                    if (res) { // true>帳號重覆
+                        $(".duplicate").css("display","");
+                    } else { // 帳號通過
+                        $(".duplicate").css("display","none");
+                    }
+                },
+                error: function (err) { console.log(err) },
+            });
+    }
+
+    // 驗證Email
+    function validateEmail() {
+        if ($('#inputAccount').val().trim().length == 0) {
+            $(".account_not_null").css("display","");
+            return;
+        } else {
+            $(".account_not_null").css("display","none"); 
+        }
+        if ($('#inputPassword').val().trim().length == 0) {
+            $(".pd_not_null").css("display","");
+            return;
+        } else {
+            $(".pd_not_null").css("display","none");
+        }
+        if ($('#inputEmail').val().trim().length == 0) {
+            $(".email_not_null").css("display","");
+            return;
+        } else {
+            $(".email_not_null").css("display","none");
+        }
+        const user = {
+            account:$('#inputAccount').val(), 
+            password:$('#inputPassword').val(), 
+            email:$('#inputEmail').val(), 
+        };
+
+        $.ajax({
+            type: "POST",
+            url: "http://localhost:8080/verify",
+            contentType: 'application/json',
+            data: JSON.stringify(user),
+            success: function(res){
+                if ("0" === res) {
+                    console.log("請至您的信箱確認!");
+                } else {
+                    alert('系統發生錯誤!');
+                }
+            },
+            error: function (err) {
+                alert('系統發生錯誤!'); 
+            },
+        });
     }
 
 </script>

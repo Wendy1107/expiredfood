@@ -4,6 +4,7 @@ import java.util.Date;
 
 public class Users {
 	
+	private int user_id = 0;
 	/** 使用者帳號 */
 	private String account = "";
 	/** 使用者密碼 */
@@ -26,7 +27,17 @@ public class Users {
 	private Date created_time;
 	/** 更新時間 */
 	private Date updated_time;
+	/** 驗證 */
+	private Date verified;
+	/** 暫存密碼 */
+	private Date temp_password;
 	
+	public int getUser_id() {
+		return user_id;
+	}
+	public void setUser_id(int user_id) {
+		this.user_id = user_id;
+	}
 	public String getAccount() {
 		return account;
 	}
@@ -92,6 +103,18 @@ public class Users {
 	}
 	public void setUpdated_time(Date updated_time) {
 		this.updated_time = updated_time;
+	}
+	public Date getVerified() {
+		return verified;
+	}
+	public void setVerified(Date verified) {
+		this.verified = verified;
+	}
+	public Date getTemp_password() {
+		return temp_password;
+	}
+	public void setTemp_password(Date temp_password) {
+		this.temp_password = temp_password;
 	}
 	
 }
