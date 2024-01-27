@@ -7,16 +7,16 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.jw.expiredfood.bean.Users;
-import com.jw.expiredfood.service.SignInService;
+import com.jw.expiredfood.service.UsersService;
 
 @CrossOrigin
 @RestController
-public class UsersLoginController {
+public class UsersController {
 	
 	@Autowired
-	SignInService signInService;
+	UsersService signInService;
 	
-	@PostMapping("/signin")
+	@PostMapping("/register")
 	public String signin(@RequestBody Users user) {
 		
 		return signInService.signin(user);

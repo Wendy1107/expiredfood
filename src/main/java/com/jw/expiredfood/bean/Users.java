@@ -8,6 +8,8 @@ public class Users {
 	private String account = "";
 	/** 使用者密碼 */
 	private String password = "";
+	/** 確認密碼 */
+	private String confirm_password = "";
 	/** Email */
 	private String email = "";
 	/** 手機 */
@@ -36,6 +38,12 @@ public class Users {
 	}
 	public void setPassword(String password) {
 		this.password = password;
+	}
+	public String getConfirm_password() {
+		return confirm_password;
+	}
+	public void setConfirm_password(String confirm_password) {
+		this.confirm_password = confirm_password;
 	}
 	public String getEmail() {
 		return email;
@@ -85,5 +93,5 @@ public class Users {
 	public void setUpdated_time(Date updated_time) {
 		this.updated_time = updated_time;
 	}
-
+	
 }

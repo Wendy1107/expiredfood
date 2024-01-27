@@ -14,7 +14,7 @@ import com.jw.expiredfood.bean.Users;
 import com.jw.expiredfood.rowMapper.UserRowMapper;
 
 @Component
-public class SignInDAO {
+public class UsersDAO {
 	
 	@Autowired
 	private NamedParameterJdbcTemplate namedParameterJdbcTemplate;
